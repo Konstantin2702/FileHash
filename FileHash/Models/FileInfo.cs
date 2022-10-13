@@ -9,5 +9,10 @@ namespace FileHash
 
         [JsonProperty("hash")]
         public string Hash { get; set; }
+
+        public bool IsEqualHash(string computedHash)
+        {
+            return computedHash == Hash;
+        }
     }
 }
