@@ -12,8 +12,9 @@ namespace FileHash
             {
                 JsonSerializer serializer = new JsonSerializer();
                 files = serializer.Deserialize(file, typeof(FileInfoList)) as FileInfoList;
+                return files;
             }
-            return files;
+           
         }
     }
 }
