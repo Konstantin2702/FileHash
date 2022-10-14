@@ -20,7 +20,7 @@ namespace FileHash.Models
                 }
                 else
                 {
-                    Console.WriteLine($"File doesn't exits at this path {file.Path}");
+                    Console.WriteLine($"File in Data.json with path {file.Path} doesn't exits");
                 }
             }
             return result;
