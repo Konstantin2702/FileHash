@@ -25,5 +25,37 @@ namespace FileHash.Models
             }
             return result;
         }
+
+        public static void PrintWrongHash(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    FileInfoList files = FileInfoReader.Read(filePath);
+                    var filesWithWrongHash = FileInfoList.GetWrongHashFiles(files);
+                    if (filesWithWrongHash.Count() == 0)
+                    {
+                        Console.WriteLine("There are no files with wrong hashes");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Files with wrong hashes:");
+                        foreach (var path in filesWithWrongHash)
+                        {
+                            Console.WriteLine(path);
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"File doesn't exits at this path {filePath}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 }
