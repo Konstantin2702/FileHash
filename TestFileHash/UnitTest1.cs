@@ -63,7 +63,7 @@ namespace TestFileHash
             {
                 Path = "../../../Data/testFile1.txt"
             };
-            string testHash = Hash.GetFileHash(file.Path);
+            string testHash = Hash.ComputeFileHash(file.Path);
             Assert.AreEqual(rightHash, testHash);
         }
 

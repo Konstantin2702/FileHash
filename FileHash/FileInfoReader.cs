@@ -1,5 +1,5 @@
 ﻿using FileHash.Models;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace FileHash
 {
@@ -7,11 +7,10 @@ namespace FileHash
     {
         public static FileInfoList Read(string path)
         {
-            FileInfoList files = new();
-            using (StreamReader file = File.OpenText(path))
+            using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                files = serializer.Deserialize(file, typeof(FileInfoList)) as FileInfoList;
+
+                FileInfoList files = JsonSerializer.Deserialize<FileInfoList>(fs);
                 return files;
             }
            

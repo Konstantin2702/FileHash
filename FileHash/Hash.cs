@@ -4,7 +4,7 @@ namespace FileHash
 {
     public static class Hash
     {
-        public static string GetFileHash(string path)
+        public static string ComputeFileHash(string path)
         {
             using FileStream fs = File.OpenRead(path);
             using MD5 md5 = MD5.Create();

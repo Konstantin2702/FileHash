@@ -1,13 +1,13 @@
 ﻿{
-  "files": [
+  "Files": [
     {
-      "path": "../../../Data/testFile1.txt",
-      "hash": "AE6F066EE24382637BC69E26C18D4FAA"
+      "Path": "../../../Data/testFile1.txt",
+      "Hash": "AE6F066EE24382637BC69E26C18D4FAA"
     },
 
     {
-      "path": "../../../Data/testFile2.txt",
-      "hash": "AFEFE44B002F7B835E190DBD498A80D0"
+      "Path": "../../../Data/testFile2.txt",
+      "Hash": "AFEFE44B002F7B835E190DBD498A80D0"
     }
   ]
 }

@@ -13,7 +13,7 @@ namespace FileHash.Models
             {
                 if (File.Exists(file.Path))
                 {
-                    if (!file.IsEqualHash(Hash.GetFileHash(file.Path)))
+                    if (!file.IsEqualHash(Hash.ComputeFileHash(file.Path)))
                     {
                         result.Add(file.Path);
                     }
