@@ -8,7 +8,7 @@
 
         public bool IsEqualHash(string computedHash)
         {
-            return computedHash == Hash;
+            return Hash.Equals(computedHash, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
