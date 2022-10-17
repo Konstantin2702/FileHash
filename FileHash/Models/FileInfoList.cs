@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-namespace FileHash.Models
+﻿namespace FileHash.Models
 {
     public class FileInfoList
     {
-        [JsonProperty("files")]
         public IEnumerable<FileInfo> Files { get; set; }
 
         public static IEnumerable<string> GetWrongHashFiles(FileInfoList fileInfoList)
