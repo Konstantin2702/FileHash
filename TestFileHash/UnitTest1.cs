@@ -8,29 +8,28 @@ namespace TestFileHash
 {
     public class Tests
     {
-
-        List<FileInfo> readWithRightHashes;
-        List<FileInfo> readWithWrongHashes;
+        List<FileInformation> readWithRightHashes;
+        List<FileInformation> readWithWrongHashes;
 
         [SetUp]
         public void Setup()
         {
-            FileInfo fileWithRightHash1 = new FileInfo
+            FileInformation fileWithRightHash1 = new FileInformation
             {
                 Path = "../../../Data/testFile1.txt",
                 Hash = "AE6F066EE24382637BC69E26C18D4FAA"
             };
-            FileInfo fileWithRightHash2 = new FileInfo
+            FileInformation fileWithRightHash2 = new FileInformation
             {
                 Path = "../../../Data/testFile2.txt",
                 Hash = "AFEFE44B002F7B835E190DBD498A80D0"
             };
-            FileInfo fileWithWrongHash1 = new FileInfo
+            FileInformation fileWithWrongHash1 = new FileInformation
             {
                 Path = "../../../Data/testFile1.txt",
                 Hash = "AE6F066EE24382637BC69EDFC18D4FAA"
             };
-            FileInfo fileWithWrongHash2 = new FileInfo
+            FileInformation fileWithWrongHash2 = new FileInformation
             {
                 Path = "../../../Data/testFile2.txt",
                 Hash = "AFEFE44B002F7B83DF190DBD498A80D0"
@@ -45,7 +44,7 @@ namespace TestFileHash
         public void TestReadFromJson()
         {
             string pathForTestRead = "../../../Data/testFileJson.json";
-            List<FileInfo> testRead = new();
+            List<FileInformation> testRead = new();
             testRead = FileInfoReader.Read(pathForTestRead).Files.ToList();
 
             for (int i = 0; i < readWithRightHashes.Count(); i++)
@@ -59,7 +58,7 @@ namespace TestFileHash
         public void TestHash()
         {
             string rightHash = "AE6F066EE24382637BC69E26C18D4FAA";
-            FileInfo file = new FileInfo
+            FileInformation file = new FileInformation
             {
                 Path = "../../../Data/testFile1.txt"
             };
@@ -72,7 +71,7 @@ namespace TestFileHash
         {
             FileInfoList filesWithRightHash = new();
             filesWithRightHash.Files = readWithRightHashes;
-            var test = FileInfoList.GetWrongHashFiles(filesWithRightHash);
+            var test = HashGetHandler.GetWrongHashFiles(filesWithRightHash.Files);
             Assert.Zero(test.Count());
         }
 
@@ -81,7 +80,7 @@ namespace TestFileHash
         {
             FileInfoList filesWithWrongHash = new();
             filesWithWrongHash.Files = readWithWrongHashes;
-            var test = FileInfoList.GetWrongHashFiles(filesWithWrongHash);
+            var test = HashGetHandler.GetWrongHashFiles(filesWithWrongHash.Files);
             Assert.AreEqual(readWithWrongHashes.Count(), test.Count());
         }
     }
