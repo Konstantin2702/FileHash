@@ -6,9 +6,17 @@ namespace FileHash
     {
         public static string ComputeFileHash(string path)
         {
-            using FileStream fs = File.OpenRead(path);
-            using MD5 md5 = MD5.Create();
-            return BitConverter.ToString(md5.ComputeHash(fs)).Replace("-", string.Empty);
+            try
+            {
+                using var fs = File.OpenRead(path);
+                using var md5 = MD5.Create();
+                return BitConverter.ToString(md5.ComputeHash(fs)).Replace("-", string.Empty);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
+
