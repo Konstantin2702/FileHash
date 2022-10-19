@@ -3,35 +3,32 @@ namespace FileHash
 {
     public static class HashGetHandler
     {
-        public enum Errors
+        private static readonly object Locker = new();
+        public static IEnumerable<string> GetWrongHashFiles(IEnumerable<FileInformation> files, Log log)
         {
-            WrongPath,
-            WrongRead
-        }
-        public static List<Tuple<string, Errors>> WrongFilePaths { get; set; } = new();
-
-        public static IEnumerable<string> GetWrongHashFiles(IEnumerable<FileInformation> files)
-        {
-            foreach (var file in files)
+            lock (Locker)
             {
-                if (File.Exists(file.Path))
+                foreach (var file in files)
                 {
-                    var computeHash = Hash.ComputeFileHash(file.Path);
-                    if (computeHash is not null)
+                    if (File.Exists(file.Path))
                     {
-                        if (!file.IsEqualHash(computeHash))
+                        var computeHash = Hash.ComputeFileHash(file.Path);
+                        if (!computeHash.Contains("--"))
                         {
-                            yield return file.Path;
+                            if (!file.IsEqualHash(computeHash))
+                            {
+                                yield return file.Path;
+                            }
+                        }
+                        else
+                        {
+                            log.Exceptions.Add(computeHash);
                         }
                     }
                     else
                     {
-                        WrongFilePaths.Add(new Tuple<string, Errors>(file.Path, Errors.WrongRead));
+                        log.Exceptions.Add("--" + "File doesn't exist" + " at " + file.Path);
                     }
-                }
-                else
-                {
-                    WrongFilePaths.Add(new Tuple<string, Errors>(file.Path, Errors.WrongPath));
                 }
             }
         }
