@@ -12,9 +12,9 @@ namespace FileHash
                 using var md5 = MD5.Create();
                 return BitConverter.ToString(md5.ComputeHash(fs)).Replace("-", string.Empty);
             }
-            catch
+            catch (Exception e)
             {
-                return null;
+                return "--" + e.Message + " at " + path;
             }
         }
     }
