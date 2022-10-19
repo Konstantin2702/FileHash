@@ -8,61 +8,63 @@ namespace TestFileHash
 {
     public class Tests
     {
-        List<FileInformation> readWithRightHashes;
-        List<FileInformation> readWithWrongHashes;
+        private List<FileInformation> _readWithRightHashes;
+        private List<FileInformation> _readWithWrongHashes;
+        private Log _log;
 
         [SetUp]
         public void Setup()
         {
-            FileInformation fileWithRightHash1 = new FileInformation
+            _log = new Log();
+            var fileWithRightHash1 = new FileInformation
             {
                 Path = "../../../Data/testFile1.txt",
                 Hash = "AE6F066EE24382637BC69E26C18D4FAA"
             };
-            FileInformation fileWithRightHash2 = new FileInformation
+            var fileWithRightHash2 = new FileInformation
             {
                 Path = "../../../Data/testFile2.txt",
                 Hash = "AFEFE44B002F7B835E190DBD498A80D0"
             };
-            FileInformation fileWithWrongHash1 = new FileInformation
+            var fileWithWrongHash1 = new FileInformation
             {
                 Path = "../../../Data/testFile1.txt",
                 Hash = "AE6F066EE24382637BC69EDFC18D4FAA"
             };
-            FileInformation fileWithWrongHash2 = new FileInformation
+            var fileWithWrongHash2 = new FileInformation
             {
                 Path = "../../../Data/testFile2.txt",
                 Hash = "AFEFE44B002F7B83DF190DBD498A80D0"
             };
-            readWithRightHashes = new();
-            readWithWrongHashes = new();
-            readWithRightHashes.Add(fileWithRightHash1); readWithRightHashes.Add(fileWithRightHash2);
-            readWithWrongHashes.Add(fileWithWrongHash1); readWithWrongHashes.Add(fileWithWrongHash2);
+            _readWithRightHashes = new();
+            _readWithWrongHashes = new();
+            _readWithRightHashes.Add(fileWithRightHash1); _readWithRightHashes.Add(fileWithRightHash2);
+            _readWithWrongHashes.Add(fileWithWrongHash1); _readWithWrongHashes.Add(fileWithWrongHash2);
         }
 
         [Test]
         public void TestReadFromJson()
         {
-            string pathForTestRead = "../../../Data/testFileJson.json";
+            var pathForTestRead = "../../../Data/testFileJson.json";
             List<FileInformation> testRead = new();
-            testRead = FileInfoReader.Read(pathForTestRead).Files.ToList();
+            testRead = FileInfoReader.Read(pathForTestRead, _log).Files.ToList();
 
-            for (int i = 0; i < readWithRightHashes.Count(); i++)
+            for (int i = 0; i < _readWithRightHashes.Count(); i++)
             {
-                Assert.AreEqual(readWithRightHashes[i].Hash, testRead[i].Hash);
-                Assert.AreEqual(readWithRightHashes[i].Path, testRead[i].Path);
+                Assert.AreEqual(_readWithRightHashes[i].Hash, testRead[i].Hash);
+                Assert.AreEqual(_readWithRightHashes[i].Path, testRead[i].Path);
             }
         }
 
         [Test]
         public void TestHash()
         {
-            string rightHash = "AE6F066EE24382637BC69E26C18D4FAA";
-            FileInformation file = new FileInformation
+            var rightHash = "AE6F066EE24382637BC69E26C18D4FAA";
+            var file = new FileInformation
             {
                 Path = "../../../Data/testFile1.txt"
             };
-            string testHash = Hash.ComputeFileHash(file.Path);
+            var testHash = Hash.ComputeFileHash(file.Path);
             Assert.AreEqual(rightHash, testHash);
         }
 
@@ -70,8 +72,8 @@ namespace TestFileHash
         public void TestRightFilesHashes()
         {
             FileInfoList filesWithRightHash = new();
-            filesWithRightHash.Files = readWithRightHashes;
-            var test = HashGetHandler.GetWrongHashFiles(filesWithRightHash.Files);
+            filesWithRightHash.Files = _readWithRightHashes;
+            var test = HashGetHandler.GetWrongHashFiles(filesWithRightHash.Files, _log);
             Assert.Zero(test.Count());
         }
 
@@ -79,9 +81,9 @@ namespace TestFileHash
         public void TestWrongFilesHashed()
         {
             FileInfoList filesWithWrongHash = new();
-            filesWithWrongHash.Files = readWithWrongHashes;
-            var test = HashGetHandler.GetWrongHashFiles(filesWithWrongHash.Files);
-            Assert.AreEqual(readWithWrongHashes.Count(), test.Count());
+            filesWithWrongHash.Files = _readWithWrongHashes;
+            var test = HashGetHandler.GetWrongHashFiles(filesWithWrongHash.Files, _log);
+            Assert.AreEqual(_readWithWrongHashes.Count(), test.Count());
         }
     }
 }
