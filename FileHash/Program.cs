@@ -4,39 +4,24 @@
     {
         private static void Main(string[] args)
         {
+            Log log = new();
             var path = args[0];
-            while (true)
+
+            if (File.Exists(path))
             {
-                if (File.Exists(path))
+                var files = FileInfoReader.Read(path, log);
+                if (files.Files is not null)
                 {
-                    var files = FileInfoReader.Read(path);
-                    if (files is not null)
-                    {
-                        var filesWithWrongHash = HashGetHandler.GetWrongHashFiles(files.Files);
+                    var filesWithWrongHash = HashGetHandler.GetWrongHashFiles(files.Files, log);
+                    PrintWrongHash(filesWithWrongHash);
 
-                        PrintWrongHash(filesWithWrongHash);
-                        if (HashGetHandler.WrongFilePaths.Any())
-                        {
-                            PrintWrongPaths(HashGetHandler.WrongFilePaths);
-                        }
-
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Check content of your {path} and run the app again");
-                        break;
-                    }
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"\nFile doesn't exits at this path {path}");
-                    Console.ResetColor();
-                    Console.WriteLine("Write right path of file");
-                    path = Console.ReadLine();
                 }
             }
+            else
+            {
+                log.Exceptions.Add("File doesn't exists at this path {path}");
+            }
+            PrintExceptions(log.Exceptions);
         }
 
         private static void PrintWrongHash(IEnumerable<string> files)
@@ -57,16 +42,16 @@
             }
         }
 
-        private static void PrintWrongPaths(IEnumerable<Tuple<string, HashGetHandler.Errors>> wrongPaths)
+        private static void PrintExceptions(IEnumerable<string> exceptions)
         {
-            if (wrongPaths.Any())
+            if (exceptions.Any())
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nErrors in files:");
                 Console.ResetColor();
-                foreach (var tuple in wrongPaths)
+                foreach (var str in exceptions)
                 {
-                    Console.WriteLine(tuple.Item2 + "\t" + tuple.Item1);
+                    Console.WriteLine(str);
                 }
             }
 
